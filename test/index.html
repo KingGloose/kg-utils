@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="width: 100px; height: 100px; background-color: rebeccapurple"></div>
+
+    <script>
+      function useAnimationFrame(animationFn, animationTime = 0) {
+        let isFinish = false;
+
+        const start = () => {
+          let startTime = null;
+          const animation = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const progress = (currentTime - startTime) / animationTime;
+            if (!isFinish && progress <= 1) {
+              animationFn(progress);
+              requestAnimationFrame(animation);
+            }
+          };
+
+          requestAnimationFrame(animation);
+        };
+
+        const stop = () => {
+          isFinish = true;
+        };
+
+        return { start, stop };
+      }
+
+      const { start, stop } = useAnimationFrame((progress) => {
+        // console.log(1);
+      }, 1000);
+      start();
+
+      requestAnimationFrame(() => {
+        console.log(1)
+      })
+    </script>
+  </body>
+</html>
