@@ -1,4 +1,4 @@
-import { deepClone, CLONE_MODE } from "../common/index";
+import { deepClone, CLONE_MODE } from "../utils/common";
 
 const obj: Record<string, any> = {
   // =========== 1.基础数据类型 ===========

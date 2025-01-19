@@ -1,4 +1,4 @@
-import { isObject } from "../is/index";
+import { isObject } from "./is";
 
 export enum CLONE_MODE {
   AUTO,
