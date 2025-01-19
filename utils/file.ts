@@ -1,3 +1,5 @@
+import { isValidURL } from "./is";
+
 /**
  * 获取浏览器的 URL 创建对象
  * @returns {URL} - 浏览器的 URL 创建对象
@@ -25,9 +27,6 @@ export function fileToUrl(file: File): string | undefined {
 
 /**
  * 释放指定的文件 URL 对象，以释放资源
- * 该函数尝试撤销之前创建的文件 URL 对象，从而释放系统资源。
- * 如果在撤销过程中发生错误，它会记录错误信息并返回空字符串。
- *
  * @param {string} url - 需要撤销的文件 URL
  * @returns {void} - 如果发生错误则返回空字符串
  */
@@ -45,11 +44,34 @@ export function releaseFileUrl(url: string): void {
  * @param {number} size - 文件大小（以字节为单位）
  * @returns {string} - 格式化后的文件大小字符串
  */
-export function getfilesize(size: number): string {
+export function formatFileSize(size: number): string {
   const num = 1024.0; // byte
   if (size < num) return size + " B";
   if (size < Math.pow(num, 2)) return (size / num).toFixed(2) + " KB"; // kb
   if (size < Math.pow(num, 3)) return (size / Math.pow(num, 2)).toFixed(2) + " MB"; // M
   if (size < Math.pow(num, 4)) return (size / Math.pow(num, 3)).toFixed(2) + " G"; // G
   return (size / Math.pow(num, 4)).toFixed(2) + " T"; // T
+}
+
+/**
+ * 触发文件下载
+ * @param {string} url - 文件的 URL 地址
+ * @param {string} [name] - 下载时的文件名称（可选，默认为当前时间戳）
+ */
+export function downloadFile(url: string, name: string = Date.now().toString()) {
+  try {
+    if (!isValidURL(url)) throw new Error("Invalid URL");
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+
+    if (typeof a.download === "undefined") {
+      window.open(name, "_blank");
+    } else {
+      a.click();
+    }
+  } catch (error) {
+    console.error("Error downloading file:", error);
+  }
 }
