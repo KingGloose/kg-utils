@@ -1,46 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>屏幕捕捉示例</title>
   </head>
   <body>
-    <div style="width: 100px; height: 100px; background-color: rebeccapurple"></div>
+    <h2>屏幕捕捉示例</h2>
+    <button id="startCapture">开始捕捉屏幕</button>
+    <button id="stopCapture" disabled>停止捕捉</button>
+    <video id="screenVideo" autoplay playsinline></video>
 
     <script>
-      function useAnimationFrame(animationFn, animationTime = 0) {
-        let isFinish = false;
+      const startButton = document.getElementById("startCapture");
+      const stopButton = document.getElementById("stopCapture");
+      const videoElement = document.getElementById("screenVideo");
+      let mediaStream = null;
 
-        const start = () => {
-          let startTime = null;
-          const animation = (currentTime) => {
-            if (!startTime) startTime = currentTime;
-            const progress = (currentTime - startTime) / animationTime;
-            if (!isFinish && progress <= 1) {
-              animationFn(progress);
-              requestAnimationFrame(animation);
-            }
-          };
+      // 开始屏幕捕捉
+      startButton.addEventListener("click", async () => {
+        try {
+          mediaStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { cursor: "always" }, // 捕捉鼠标指针
+            audio: false, // 是否捕捉音频
+          });
 
-          requestAnimationFrame(animation);
-        };
+          videoElement.srcObject = mediaStream;
+          startButton.disabled = true;
+          stopButton.disabled = false;
 
-        const stop = () => {
-          isFinish = true;
-        };
+          // 监听流的结束事件
+          mediaStream.getVideoTracks()[0].addEventListener("ended", () => {
+            stopCapture();
+          });
+        } catch (err) {
+          console.error("屏幕捕捉失败:", err);
+        }
+      });
 
-        return { start, stop };
+      // 停止屏幕捕捉
+      stopButton.addEventListener("click", stopCapture);
+
+      function stopCapture() {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          videoElement.srcObject = null;
+        }
+        startButton.disabled = false;
+        stopButton.disabled = true;
       }
-
-      const { start, stop } = useAnimationFrame((progress) => {
-        // console.log(1);
-      }, 1000);
-      start();
-
-      requestAnimationFrame(() => {
-        console.log(1)
-      })
     </script>
   </body>
 </html>
