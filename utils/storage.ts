@@ -11,7 +11,10 @@ export type ExpireItem = {
 };
 
 // 增强 storage
-// 01 初始化的时候会将
+// 01 将存储数据转到内存中，提高查找速度
+// 02 过期时间，惰性删除数据
+// 03 加解密函数
+// 04 命名空间支持
 class EnhanceStorage {
   private storage: Storage;
   private namespace: string = ""; // 命名空间
