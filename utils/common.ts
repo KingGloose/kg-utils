@@ -133,3 +133,59 @@ export function useAnimationFrame(animationFn: (progress: number) => void, anima
 
   return { start, stop };
 }
+
+/**
+ * 检测当前浏览器类型 IIFE优化
+ * @returns 当前浏览器的类型名称，若无法识别则返回空字符串
+ */
+export const browserType = (function () {
+  if (typeof window === "undefined" || !window.navigator?.userAgent) return "";
+  const browserMap = [
+    { regex: /msie|trident/, type: "IE" },
+    { regex: /edg|edge/, type: "Edge" },
+    { regex: /firefox/, type: "Firefox" },
+    { regex: /ucbrowser/, type: "UC" },
+    { regex: /opera|opr/, type: "Opera" },
+    { regex: /baidubrowser/, type: "Baidu" },
+    { regex: /metasr/, type: "Sougou" },
+    { regex: /tencenttraveler|qqbrowse/, type: "QQ" },
+    { regex: /maxthon/, type: "Maxthon" },
+    { regex: /lbbrowser/, type: "Liebao" },
+    { regex: /2345explorer/, type: "2345" },
+    { regex: /qihu 360ee/, type: "360" },
+    { regex: /chrome/, type: "Chrome" },
+    { regex: /safari/, type: "Safari" },
+  ];
+
+  const ua = window.navigator.userAgent.toLowerCase();
+  const browser = browserMap.find(({ regex }) => regex.test(ua));
+  return browser ? browser.type : "";
+})();
+
+/**
+ * 获取操作系统类型 IIFE优化
+ * @returns {string} 操作系统名称
+ */
+export const getOSType = (function () {
+  if (typeof window === "undefined" || !window.navigator?.userAgent) return "";
+
+  const osMap = [
+    { regex: /(iphone|ipad|ios)/i, type: "iOS" },
+    { regex: /mac os/i, type: "Mac" },
+    { regex: /(android|harmony)/i, type: "Android" },
+    { regex: /windows/i, type: "Windows" },
+  ];
+
+  const ua = window.navigator.userAgent.toLowerCase();
+  const os = osMap.find(({ regex }) => regex.test(ua));
+  return os ? os.type : "";
+})();
+
+/**
+ * 等待
+ * @param ms 延迟的毫秒数
+ * @returns 一个在指定毫秒数后解决的Promise对象
+ */
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

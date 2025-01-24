@@ -1,6 +1,5 @@
 /**
  * 获取视频文件的元数据，包括海报图像的 Base64 编码、文件对象、视频宽度、高度和持续时间。
- *
  * @param fileUrl - 视频文件的 URL。
  * @returns 一个 Promise，解析为包含视频元数据的对象。
  * @throws 如果无法创建 canvas 上下文或生成 blob，则抛出错误。
