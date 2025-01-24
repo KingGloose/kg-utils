@@ -1,4 +1,4 @@
-import { isObject } from "./is";
+import { isObject, isPromise } from "./is";
 
 export enum CLONE_MODE {
   AUTO,
