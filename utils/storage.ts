@@ -1,20 +1,11 @@
 import { isEmpty } from "./is";
 
-// TODO
-// 01 添加 namespace 做区分
-
-// 反思
-// 为什么这个这么简单的东西写了这么长时间，1个小时绰绰有余，但是写了近3个小时
-// 01 一开始方向没定好，这东西不是打眼睛就确定高德东西，为什么没定好
-// 02 方案一直在做修改，和 01 一致，一开始就想好再去写
-// 03 写代码 和 修bug 测试时间，留 6:4 的时间
-
-enum StorageType {
+export enum StorageType {
   Local = "localStorage",
   Session = "sessionStorage",
 }
 
-type ExpireItem = {
+export type ExpireItem = {
   createTime: number;
   expireTime: number;
 };
@@ -25,11 +16,18 @@ class EnhanceStorage {
 
   private cache = new Map<string, any>();
   private expireList = new Map<string, ExpireItem>();
-  private decodeHandler = (value: any) => value; // 解密
-  private encodeHandler = (value: any) => value; // 加密
+  private decodeHandler = (value: any) => value; // 解密默认函数
+  private encodeHandler = (value: any) => value; // 加密默认函数
 
   private EXPIRE_TIME_LIST_KEY: string;
 
+  /**
+   * 构造函数，初始化存储实例
+   * @param nameSpace - 存储的命名空间
+   * @param storageType - 存储类型，可以是 Local 或 Session
+   * @param decodeHandler - 可选参数，用于解密存储的值
+   * @param encodeHandler - 可选参数，用于加密存储的值
+   */
   constructor(nameSpace: string, storageType: StorageType, decodeHandler?: any, encodeHandler?: any) {
     this.storage = window[storageType] as Storage;
     this.namespace = nameSpace;
@@ -42,10 +40,18 @@ class EnhanceStorage {
     this.checkExpireAll();
   }
 
+  /**
+   * 获取带有命名空间的键名
+   * @param key - 原始键名
+   * @returns 带有命名空间的键名
+   */
   private getSpaceKey(key: string) {
     return `__${this.namespace}-${key}__`;
   }
 
+  /**
+   * 将存储中的数据同步到内存中
+   */
   private syncStorageToCache() {
     // 更新数据
     for (const key in this.storage) {
@@ -62,10 +68,19 @@ class EnhanceStorage {
     }
   }
 
+  /**
+   * 将过期列表内容同步到存储中
+   */
   private syncExpireCacheToStorage() {
     this.storage.setItem(this.EXPIRE_TIME_LIST_KEY, JSON.stringify(Object.fromEntries(this.expireList)));
   }
 
+  /**
+   * 设置存储项
+   * @param key - 存储项的键名
+   * @param value - 存储项的值
+   * @param expire - 可选参数，存储项的过期时间（毫秒）
+   */
   setItem(key: string, value: any, expire: number = 0): void {
     const spaceKey = this.getSpaceKey(key);
     if (!isEmpty(expire) && expire > 0) {
@@ -79,6 +94,11 @@ class EnhanceStorage {
     this.syncExpireCacheToStorage();
   }
 
+  /**
+   * 获取存储项
+   * @param key - 存储项的键名
+   * @returns 存储项的值，如果已过期则返回 null
+   */
   getItem(key: string): any {
     const spaceKey = this.getSpaceKey(key);
     const expireItem = this.expireList.get(spaceKey);
@@ -103,6 +123,10 @@ class EnhanceStorage {
     return value;
   }
 
+  /**
+   * 删除存储项
+   * @param key - 存储项的键名
+   */
   deleteItem(key: string): void {
     const spaceKey = this.getSpaceKey(key);
     this.cache.delete(spaceKey);
@@ -111,12 +135,20 @@ class EnhanceStorage {
     this.syncExpireCacheToStorage();
   }
 
+  /**
+   * 清空缓存和存储
+   */
   clearCache(): void {
     this.cache.clear();
     this.expireList.clear();
     this.storage.clear();
   }
 
+  /**
+   * 检查存储项是否已过期
+   * @param key - 存储项的键名
+   * @returns 如果已过期则返回 true，否则返回 false
+   */
   isExpired(key: string) {
     const spaceKey = this.getSpaceKey(key);
     let expireItem = this.expireList.get(spaceKey);
@@ -132,6 +164,9 @@ class EnhanceStorage {
     return !expireItem || expireItem.expireTime < Date.now();
   }
 
+  /**
+   * 检查所有存储项，删除已过期的项
+   */
   checkExpireAll() {
     for (const key of this.expireList.keys()) {
       const isExpire = this.isExpired(key);
