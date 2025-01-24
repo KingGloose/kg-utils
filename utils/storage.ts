@@ -10,6 +10,8 @@ export type ExpireItem = {
   expireTime: number;
 };
 
+// 增强 storage
+// 01 初始化的时候会将
 class EnhanceStorage {
   private storage: Storage;
   private namespace: string = ""; // 命名空间
@@ -54,17 +56,18 @@ class EnhanceStorage {
    */
   private syncStorageToCache() {
     // 更新数据
-    for (const key in this.storage) {
-      if (key === this.EXPIRE_TIME_LIST_KEY) continue;
-      const value = this.storage.getItem(key);
-      if (!isEmpty(value)) this.cache.set(key, value);
+    for (const spaceKey in this.storage) {
+      if (spaceKey === this.EXPIRE_TIME_LIST_KEY) continue;
+      if (!(spaceKey.startsWith(`__${this.namespace}-`) && spaceKey.endsWith(`__`))) continue;
+      const value = this.storage.getItem(spaceKey);
+      if (!isEmpty(value)) this.cache.set(spaceKey, value);
     }
 
     // 更新过期列表
     const expireListStr = this.storage.getItem(this.EXPIRE_TIME_LIST_KEY) || "{}";
     const expireListParse = JSON.parse(expireListStr) as { [key: string]: ExpireItem };
-    for (const key in expireListParse) {
-      this.expireList.set(key, expireListParse[key]);
+    for (const spaceKey in expireListParse) {
+      this.expireList.set(spaceKey, expireListParse[spaceKey]);
     }
   }
 
