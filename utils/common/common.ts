@@ -20,7 +20,7 @@ export function deepClone(value: any, type = CLONE_MODE.AUTO) {
   const map = new WeakMap();
   const _handleDeep = function (oriValue: any) {
     // Base
-    if (!isObject(oriValue)) {
+    if (!isObject(oriValue, false)) {
       return oriValue;
     }
 
@@ -43,9 +43,14 @@ export function deepClone(value: any, type = CLONE_MODE.AUTO) {
       return new Function("return " + oriValue.toString())();
     }
 
-    // Date / RegExp
-    if ([Date, RegExp].includes(oriValue.constructor)) {
-      return oriValue.constructor(oriValue);
+    // Date
+    if (oriValue instanceof Date) {
+      return new Date(oriValue);
+    }
+
+    // RegExp
+    if (oriValue instanceof RegExp) {
+      return new RegExp(oriValue.source, oriValue.flags);
     }
 
     // Map
@@ -74,17 +79,23 @@ export function deepClone(value: any, type = CLONE_MODE.AUTO) {
     }
 
     // Object
-    const newObj: Record<string, any> = {};
-    for (const key in oriValue) {
-      map.set(oriValue, newObj);
-      newObj[key] = cloneMethod(oriValue[key]);
+    const newObj: Record<string, any> = Object.create(Object.getPrototypeOf(oriValue));
+    const allProps = Object.getOwnPropertyDescriptors(oriValue); // 获取属性描述符
+    map.set(oriValue, newObj);
+
+    for (const [key, descriptor] of Object.entries(allProps)) {
+      descriptor.value = cloneMethod(descriptor.value);
+      Object.defineProperty(newObj, key, descriptor);
     }
 
     // 如果 Symbol 作为 key
     const symbolKeys = Object.getOwnPropertySymbols(oriValue);
     for (const symbolKey of symbolKeys) {
-      const newSymbolKey = Symbol(symbolKey.description);
-      Reflect.set(newObj, newSymbolKey, cloneMethod(oriValue[symbolKey]));
+      const descriptor = Object.getOwnPropertyDescriptor(oriValue, symbolKey)!;
+      if (typeof descriptor.value === "object" && descriptor.value !== null) {
+        descriptor.value = cloneMethod(descriptor.value);
+      }
+      Object.defineProperty(newObj, Symbol(symbolKey.description), descriptor);
     }
 
     return newObj;
