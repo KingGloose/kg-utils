@@ -1,4 +1,4 @@
-import { isEmpty } from "./common/is";
+import { isEmpty } from "../common/is";
 
 export enum StorageType {
   Local = "localStorage",

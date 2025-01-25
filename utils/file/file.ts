@@ -1,4 +1,4 @@
-import { isValidURL } from "./common/is";
+import { isValidURL } from "../common/is";
 
 /**
  * 获取浏览器的 URL 创建对象
