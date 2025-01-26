@@ -1,4 +1,5 @@
 import { isEmpty } from "../common/is";
+import { jsonParse } from "../common/json";
 
 export enum StorageType {
   Local = "localStorage",
@@ -117,13 +118,9 @@ class EnhanceStorage {
     let value = this.cache.get(spaceKey);
     if (!value) {
       const storageValue = this.storage.getItem(spaceKey);
-      if (storageValue) {
-        try {
-          value = JSON.parse(this.decodeHandler(storageValue));
-          this.cache.set(spaceKey, value);
-        } catch {
-          value = storageValue;
-        }
+      const decodeValue = this.decodeHandler(storageValue);
+      if (decodeValue) {
+        value = jsonParse(decodeValue);
       }
     }
     return value;
