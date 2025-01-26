@@ -1,3 +1,5 @@
+import { BaseStorage } from "./base";
+
 interface CookieOptions {
   expires?: number | Date; // 过期时间（天数或具体日期）
   path?: string; // cookie 路径
@@ -6,8 +8,10 @@ interface CookieOptions {
   sameSite?: "Strict" | "Lax" | "None"; // Cookie 的 SameSite 属性
 }
 
-export class Cookie {
-  constructor() {}
+export class Cookie extends BaseStorage {
+  constructor() {
+    super();
+  }
 
   /**
    * 设置 cookie

@@ -1,3 +1,4 @@
+import { BaseStorage } from "./base";
 import { isEmpty } from "../common/is";
 import { jsonParse } from "../common/json";
 
@@ -16,7 +17,7 @@ export type ExpireItem = {
 // 02 过期时间，惰性删除数据
 // 03 加解密函数
 // 04 命名空间支持
-class EnhanceStorage {
+export class EnhanceStorage extends BaseStorage {
   private storage: Storage;
   private namespace: string = ""; // 命名空间
 
@@ -35,6 +36,7 @@ class EnhanceStorage {
    * @param encodeHandler - 可选参数，用于加密存储的值
    */
   constructor(nameSpace: string, storageType: StorageType, decodeHandler?: any, encodeHandler?: any) {
+    super();
     this.storage = window[storageType] as Storage;
     this.namespace = nameSpace;
     if (decodeHandler) this.decodeHandler = decodeHandler;
@@ -111,7 +113,7 @@ class EnhanceStorage {
     const expireItem = this.expireList.get(spaceKey);
 
     if (expireItem && expireItem.expireTime < Date.now()) {
-      this.deleteItem(key);
+      this.removeItem(key);
       return null;
     }
 
@@ -130,7 +132,7 @@ class EnhanceStorage {
    * 删除存储项
    * @param key - 存储项的键名
    */
-  deleteItem(key: string): void {
+  removeItem(key: string): void {
     const spaceKey = this.getSpaceKey(key);
     this.cache.delete(spaceKey);
     this.expireList.delete(spaceKey);
@@ -141,7 +143,7 @@ class EnhanceStorage {
   /**
    * 清空缓存和存储
    */
-  clearCache(): void {
+  clear(): void {
     this.cache.clear();
     this.expireList.clear();
     this.storage.clear();
@@ -173,8 +175,12 @@ class EnhanceStorage {
   checkExpireAll() {
     for (const key of this.expireList.keys()) {
       const isExpire = this.isExpired(key);
-      if (isExpire) this.deleteItem(key);
+      if (isExpire) this.removeItem(key);
     }
+  }
+
+  hasItem(key: string): boolean {
+    return this.getItem(key) !== null;
   }
 }
 
