@@ -1,4 +1,4 @@
-import { formatDateTemplate } from "../date";
+import { formatDateTemplate } from "../time";
 
 describe("formatDateTemplate 函数测试", () => {
   test("使用时间戳时应该正确格式化", () => {
