@@ -55,3 +55,37 @@ export function isValidJSON(json: string): any | false {
 export function isPromise(obj: any): boolean {
   return !!obj && (typeof obj === "object" || typeof obj === "function") && typeof obj.then === "function";
 }
+
+/**
+ * 检查对象是否为空对象
+ * @param obj - 要检查的对象
+ * @returns 如果对象为空返回 true，否则返回 false
+ *
+ * @example
+ * ```typescript
+ * isEmptyObject({})           // true
+ * isEmptyObject({ a: 1 })     // false
+ * isEmptyObject(null)         // throws TypeError
+ * isEmptyObject(undefined)    // throws TypeError
+ * ```
+ */
+export function isEmptyObject(obj: any): boolean {
+  return Object.keys(obj).length === 0;
+}
+
+/**
+ * 检查数组是否为空数组
+ * @param arr - 要检查的数组
+ * @returns 如果数组为空返回 true，否则返回 false
+ *
+ * @example
+ * ```typescript
+ * isEmptyArray([])           // true
+ * isEmptyArray([1, 2, 3])    // false
+ * isEmptyArray(null)         // throws TypeError
+ * isEmptyArray(undefined)    // throws TypeError
+ * ```
+ */
+export function isEmptyArray(arr: any): boolean {
+  return arr.length === 0;
+}
