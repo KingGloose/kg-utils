@@ -64,14 +64,12 @@ describe("deepClone 函数测试", () => {
     expect(clonedObj.obj).toEqual({ name: "我是一个对象", id: 1 });
     expect(clonedObj.obj).not.toBe(complexObj.obj);
     // Array
-    console.log(clonedObj.arr, complexObj.arr, clonedObj.arr == complexObj.arr);
     expect(clonedObj.arr).toEqual([0, 1, 2]);
     expect(clonedObj.arr).not.toBe(complexObj.arr);
     // Function
     expect(typeof clonedObj.func).toBe("function");
     expect(clonedObj.func.toString()).toBe(complexObj.func.toString());
     // Date
-    console.log(clonedObj.date, clonedObj.date.constructor == Date);
     expect(clonedObj.date instanceof Date).toBe(true);
     expect(clonedObj.date.getTime()).toBe(0);
     expect(clonedObj.date).not.toBe(complexObj.date);
