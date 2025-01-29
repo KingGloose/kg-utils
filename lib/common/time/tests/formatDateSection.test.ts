@@ -1,4 +1,4 @@
-import { formatDateSection } from "../time";
+import formatDateSection from "../formatDateSection";
 
 describe("formatDateSection 函数测试", () => {
   let now: number = Date.now();

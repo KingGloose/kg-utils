@@ -1,4 +1,4 @@
-import { jsonParse } from "../json";
+import jsonParse from "../jsonParse";
 
 describe("jsonParse", () => {
   // 测试有效的 JSON 对象

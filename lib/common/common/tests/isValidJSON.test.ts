@@ -1,4 +1,4 @@
-import { isValidJSON } from "../is";
+import isValidJSON from "../../is/isValidJSON";
 
 describe("isValidJSON 函数测试", () => {
   test("有效的 JSON 字符串应该返回解析后的值", () => {
@@ -19,4 +19,4 @@ describe("isValidJSON 函数测试", () => {
     expect(isValidJSON("")).toBe(false);
     expect(isValidJSON("{'name':'test'")).toBe(false);
   });
-}); 
+});

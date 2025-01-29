@@ -1,4 +1,4 @@
-import { isPromise } from "../is";
+import isPromise from "../../is/isPromise";
 
 describe("isPromise 函数测试", () => {
   test("Promise 对象应该返回 true", () => {
@@ -19,4 +19,4 @@ describe("isPromise 函数测试", () => {
     expect(isPromise(() => {})).toBe(false);
     expect(isPromise({ then: "not a function" })).toBe(false);
   });
-}); 
+});

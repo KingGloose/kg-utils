@@ -4,7 +4,7 @@
  * @returns 一个 Promise，解析为包含视频元数据的对象。
  * @throws 如果无法创建 canvas 上下文或生成 blob，则抛出错误。
  */
-export function getVideoBlobMetadata(fileUrl: string): Promise<{
+function getVideoBlobMetadata(fileUrl: string): Promise<{
   posterBase64: string;
   posterFile: File;
   width: number;
@@ -51,3 +51,5 @@ export function getVideoBlobMetadata(fileUrl: string): Promise<{
     });
   });
 }
+
+export default getVideoBlobMetadata;

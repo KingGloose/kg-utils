@@ -39,7 +39,7 @@ interface FormatNumberOptions {
  * formatNumber(1234567, { decimals: 1, language: 'zh' })  // "123.5万"
  * ```
  */
-export function formatNumber(num: number | string, options: FormatNumberOptions = {}): string {
+function formatNumber(num: number | string, options: FormatNumberOptions = {}): string {
   const { language = "zh", decimals = 2, useGrouping = false, keepDecimals = false } = options;
 
   const units = NUMBER_UNITS[language];
@@ -77,3 +77,5 @@ export function formatNumber(num: number | string, options: FormatNumberOptions 
     return sign + addGroupingSeparator(formatDecimals(absNum));
   }
 }
+
+export default formatNumber;

@@ -7,10 +7,12 @@
  * jsonParse('123'); // 返回 123
  * jsonParse('Hello, world!'); // 返回 'Hello, world!'
  */
-export function jsonParse<T = unknown>(value: string): T | string | number {
+function jsonParse<T = unknown>(value: string): T | string | number {
   try {
     return JSON.parse(value);
   } catch {
     return value;
   }
 }
+
+export default jsonParse;

@@ -1,4 +1,4 @@
-import { isObject } from "../is";
+import isObject from "../../is/isObjct";
 
 describe("isObject 函数测试", () => {
   test("基本类型应该返回 false", () => {
@@ -29,4 +29,4 @@ describe("isObject 函数测试", () => {
     expect(isObject(new Map())).toBe(false);
     expect(isObject(new Set())).toBe(false);
   });
-}); 
+});

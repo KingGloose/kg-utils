@@ -1,4 +1,4 @@
-import { isObject, isPromise } from "./is";
+import isObject from "../is/isObjct";
 
 export enum CLONE_MODE {
   AUTO,
@@ -15,7 +15,7 @@ export enum CLONE_MODE {
  *   - `CLONE_MODE.HANDLER`: 使用自定义的深度克隆逻辑进行克隆。
  * @returns 返回克隆后的新值。
  */
-export function deepClone(value: any, type = CLONE_MODE.AUTO) {
+function deepClone(value: any, type = CLONE_MODE.AUTO) {
   let cloneMethod: any;
   const map = new WeakMap();
   const _handleDeep = function (oriValue: any) {
@@ -112,11 +112,4 @@ export function deepClone(value: any, type = CLONE_MODE.AUTO) {
   return cloneMethod(value);
 }
 
-/**
- * 等待
- * @param ms 延迟的毫秒数
- * @returns 一个在指定毫秒数后解决的Promise对象
- */
-export function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+export default deepClone;

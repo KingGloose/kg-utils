@@ -1,13 +1,13 @@
-import { BaseStorage } from "./base";
-import { isEmpty } from "../../common/common/is";
-import { jsonParse } from "../../common/common/json";
+import { baseStore } from "./baseStore";
+import isEmpty from "../../common/is/isEmpty";
+import jsonParse from "../../common/common/jsonParse";
 
 export enum StorageType {
   Local = "localStorage",
   Session = "sessionStorage",
 }
 
-export type ExpireItem = {
+type ExpireItem = {
   createTime: number;
   expireTime: number;
 };
@@ -17,7 +17,7 @@ export type ExpireItem = {
 // 02 过期时间，惰性删除数据
 // 03 加解密函数
 // 04 命名空间支持
-export class EnhanceStorage extends BaseStorage {
+class EnhanceStorage extends baseStore {
   private storage: Storage;
   private namespace: string = ""; // 命名空间
 

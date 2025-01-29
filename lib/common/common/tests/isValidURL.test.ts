@@ -1,4 +1,4 @@
-import { isValidURL } from "../is";
+import isValidURL from "../../is/isValidURL";
 
 describe("isValidURL 函数测试", () => {
   test("有效的 URL 应该返回 true", () => {

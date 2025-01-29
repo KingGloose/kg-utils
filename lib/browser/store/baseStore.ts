@@ -1,4 +1,4 @@
-export abstract class BaseStorage {
+export abstract class baseStore {
   abstract getItem(key: string): any;
   abstract setItem(key: string, value: any, ...args: any[]): void;
   abstract removeItem(key: string, ...args: any[]): void;

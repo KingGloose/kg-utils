@@ -1,5 +1,5 @@
 // 处理 URL 查询参数的获取、设置和删除
-class URLParams {
+class urlParams {
   // 获取当前页面的 URL 对象
   private get url(): URL {
     return new URL(window.location.href);
@@ -65,4 +65,4 @@ class URLParams {
   }
 }
 
-export default new URLParams();
+export default urlParams;

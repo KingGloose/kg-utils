@@ -1,4 +1,4 @@
-import { deepClone, CLONE_MODE } from "../common";
+import deepClone, { CLONE_MODE } from "../deepClone";
 
 describe("deepClone 函数测试", () => {
   const complexObj = {

@@ -1,4 +1,4 @@
-import { BaseStorage } from "./base";
+import { baseStore } from "./baseStore";
 
 interface CookieOptions {
   expires?: number | Date; // 过期时间（天数或具体日期）
@@ -8,7 +8,7 @@ interface CookieOptions {
   sameSite?: "Strict" | "Lax" | "None"; // Cookie 的 SameSite 属性
 }
 
-export class Cookie extends BaseStorage {
+class EnhanceCookie extends baseStore {
   constructor() {
     super();
   }
@@ -109,4 +109,4 @@ export class Cookie extends BaseStorage {
   }
 }
 
-export default Cookie;
+export default EnhanceCookie;

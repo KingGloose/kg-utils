@@ -23,10 +23,7 @@ type VisibilityCallback = () => void;
  * cleanup();
  * ```
  */
-export function watchPageVisibility(
-  enterCallback: VisibilityCallback = () => {},
-  leaveCallback: VisibilityCallback = () => {}
-): () => void {
+function watchPageVisibility(enterCallback: VisibilityCallback = () => {}, leaveCallback: VisibilityCallback = () => {}): () => void {
   const handleVisibilityChange = () => {
     if (document.visibilityState === "visible") {
       enterCallback();
@@ -42,3 +39,5 @@ export function watchPageVisibility(
     document.removeEventListener("visibilitychange", handleVisibilityChange);
   };
 }
+
+export default watchPageVisibility;

@@ -25,7 +25,7 @@
  * tryCatch(asyncFunction, 5).then(console.log);  // 10
  * tryCatch(asyncFunction, -1).then(console.log); // Error: Negative number!
  */
-export function tryCatch<T>(fn: (...args: any[]) => T | Promise<T>, ...args: any[]): T | Promise<T> {
+function tryCatch<T>(fn: (...args: any[]) => T | Promise<T>, ...args: any[]): T | Promise<T> {
   try {
     const result = fn.apply(null, args);
     if (result instanceof Promise) {
@@ -38,3 +38,5 @@ export function tryCatch<T>(fn: (...args: any[]) => T | Promise<T>, ...args: any
     return error as any;
   }
 }
+
+export default tryCatch;
