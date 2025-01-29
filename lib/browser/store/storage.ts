@@ -1,6 +1,6 @@
 import { BaseStorage } from "./base";
-import { isEmpty } from "../common/is";
-import { jsonParse } from "../common/json";
+import { isEmpty } from "../../common/common/is";
+import { jsonParse } from "../../common/common/json";
 
 export enum StorageType {
   Local = "localStorage",
