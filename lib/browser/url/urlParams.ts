@@ -33,10 +33,10 @@ class urlParams {
    * @param {string} value - 要设置的查询参数值
    * @returns {URLSearchParams} 更新后的查询参数对象
    */
-  set(key: string, value: string): URLSearchParams {
+  set(key: string, value: string, preUpdateCb = () => {}): URLSearchParams {
     const searchParams = this.searchParams;
     searchParams.set(key, value);
-
+    preUpdateCb(); // 更新URL前回调函数
     this.updateUrl(searchParams);
     return searchParams;
   }
@@ -57,11 +57,29 @@ class urlParams {
   /**
    * 更新浏览器地址栏的 URL，而不刷新页面
    * @param {URLSearchParams} params - 更新后的查询参数对象
-   * @private
    */
   private updateUrl(params: URLSearchParams): void {
     const newUrl = `${this.url.origin}${this.url.pathname}?${params.toString()}`;
     window.history.replaceState(null, "", newUrl);
+  }
+
+  /**
+   * 将对象转换为 URL 查询参数字符串
+   * @param {Record<string, string>} obj - 要转换的对象，键值对都必须是字符串
+   * @returns {string} 返回格式化后的查询参数字符串（不包含起始的'?'）
+   *
+   * @example
+   * // 基础使用
+   * const params = { name: 'john', age: '25' };
+   * objectToStrParams(params); // 返回: 'name=john&age=25'
+   *
+   * // 空对象
+   * objectToStrParams({}); // 返回: ''
+   */
+  private objectToStrParams(obj: Record<string, string>): string {
+    return Object.entries(obj)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
   }
 }
 
